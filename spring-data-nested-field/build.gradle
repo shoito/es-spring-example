@@ -1,0 +1,49 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.0.M3'
+		elasticsearchVersion = '5.6.0'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "http://repo.spring.io/release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "http://repo.spring.io/snapshot" }
+		maven { url "http://s3.amazonaws.com/download.elasticsearch.org/lucenesnapshots/a128fcb" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io.shoito'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "http://repo.spring.io/release" }
+	maven { url "http://repo.spring.io/milestone" }
+	maven { url "http://repo.spring.io/snapshot" }
+	maven { url "http://s3.amazonaws.com/download.elasticsearch.org/lucenesnapshots/a128fcb" }
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-data-elasticsearch:${springBootVersion}")
+	compile('org.springframework.data:spring-data-elasticsearch:3.0.0.RC2')
+	compile('org.springframework.retry:spring-retry')
+	runtime("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+	compileOnly('org.projectlombok:lombok')
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
+	compile('org.springframework.data:spring-data-commons:2.0.0.RC2')
+	compile("org.elasticsearch:elasticsearch:${elasticsearchVersion}")
+	compile("org.elasticsearch.client:transport:${elasticsearchVersion}")
+	compile("org.elasticsearch.plugin:transport-netty4-client:${elasticsearchVersion}")
+}
