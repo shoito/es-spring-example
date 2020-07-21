@@ -2,7 +2,7 @@ package io.shoito.elastic;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
+import org.elasticsearch.client.ResponseException;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +26,6 @@ public class ElasticApplication implements CommandLineRunner {
                 search();
                 Thread.sleep(500);
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -37,8 +36,12 @@ public class ElasticApplication implements CommandLineRunner {
     private void search() throws IOException {
         Request request = new Request("GET", "/");
         request.addParameter("pretty", "true");
-        Response response = restClient.performRequest(request);
-//        System.out.println(EntityUtils.toString(response.getEntity()));
-        System.out.println("Status code: " + response.getStatusLine().getStatusCode());
+        try {
+            restClient.performRequest(request);
+        } catch (ResponseException e) {
+            System.err.println("Error: " + e.getResponse().getStatusLine());
+        } catch (IOException e) {
+            System.err.println("Request failed.");
+        }
     }
 }
