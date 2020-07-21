@@ -1,7 +1,6 @@
 package io.shoito.elastic;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
@@ -36,29 +35,10 @@ public class ElasticApplication implements CommandLineRunner {
     private RestClient restClient;
 
     private void search() throws IOException {
-        System.out.println("Searching...");
         Request request = new Request("GET", "/");
         request.addParameter("pretty", "true");
         Response response = restClient.performRequest(request);
-        System.out.println(EntityUtils.toString(response.getEntity()));
+//        System.out.println(EntityUtils.toString(response.getEntity()));
+        System.out.println("Status code: " + response.getStatusLine().getStatusCode());
     }
-
-/**
-{
-  "query": {
-    "bool": {
-      "must": [
-         { "range": { "bust" : { "gte": 80 } } },
-         { "term": {"prefectureId": 13 } }
-      ],
-      "must_not": [
-         { "term": {"excludeUsers": 1 } }
-      ],
-      "should": []
-    }
-  },
-  "from": 0,
-  "size": 10
-}
- */
 }
